@@ -1,0 +1,61 @@
+@baseUrl = http://localhost:3000
+
+# RECADOS
+### Exibe todos os recados
+GET {{baseUrl}}/recados/?limit=2&offset=4
+Authorization: Bearer 123456
+### Exibe apenas um recado
+GET {{baseUrl}}/recados/30/
+### Cria um recado
+POST {{baseUrl}}/recados/
+Content-Type: application/json
+
+{
+  "texto": "Sol para Mateus fdg",
+  "deId": 6,
+  "paraId": 2
+}
+
+### Atualiza um recado pelo id
+PATCH  {{baseUrl}}/recados/30/
+Content-Type: application/json
+
+{
+  "texto": "Sol para Mateus atualizado",
+  "lido": true
+}
+
+### Apaga um recado com id 2
+DELETE  {{baseUrl}}/recados/31/
+
+
+###################
+
+
+# PESSOAS
+### Exibe todas as pessoas
+GET {{baseUrl}}/pessoas/
+# ?limit=10&offset=10
+### Exibe apenas uma pessoa
+GET {{baseUrl}}/pessoas/1/
+### Cria uma pessoa
+POST {{baseUrl}}/pessoas/
+Content-Type: application/json
+
+{
+  "nome": "lua",
+  "password": "123456",
+  "email": "lua@gmail.com"
+}
+
+### Atualiza uma pessoa pelo id
+PATCH  {{baseUrl}}/pessoas/10/
+Content-Type: application/json
+
+{
+  "nome": "Samira",
+  "password": "654321"
+}
+
+### Apaga uma pessoa com id 9
+DELETE  {{baseUrl}}/pessoas/31/
