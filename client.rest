@@ -11,7 +11,7 @@ POST {{baseUrl}}/recados/
 Content-Type: application/json
 
 {
-  "texto": "Sol para Mateus fdg",
+  "texto": "Sol para Mateus fdgss",
   "deId": 6,
   "paraId": 2
 }
@@ -21,12 +21,12 @@ PATCH  {{baseUrl}}/recados/30/
 Content-Type: application/json
 
 {
-  "texto": "Sol para Mateus atualizado",
+  "texto": "Sol para Mateus atualizadosss",
   "lido": true
 }
 
 ### Apaga um recado com id 2
-DELETE  {{baseUrl}}/recados/31/
+DELETE  {{baseUrl}}/recados/30/
 
 
 ###################
@@ -37,25 +37,25 @@ DELETE  {{baseUrl}}/recados/31/
 GET {{baseUrl}}/pessoas/
 # ?limit=10&offset=10
 ### Exibe apenas uma pessoa
-GET {{baseUrl}}/pessoas/1/
+GET {{baseUrl}}/pessoas/6/
 ### Cria uma pessoa
 POST {{baseUrl}}/pessoas/
 Content-Type: application/json
 
 {
-  "nome": "lua",
+  "nome": "Dayse",
   "password": "123456",
-  "email": "lua@gmail.com"
+  "email": "dayse2@gmail.com"
 }
 
 ### Atualiza uma pessoa pelo id
-PATCH  {{baseUrl}}/pessoas/10/
+PATCH  {{baseUrl}}/pessoas/12/
 Content-Type: application/json
 
 {
-  "nome": "Samira",
+  "nome": "Dayse2",
   "password": "654321"
 }
 
 ### Apaga uma pessoa com id 9
-DELETE  {{baseUrl}}/pessoas/31/
+DELETE  {{baseUrl}}/pessoas/14/

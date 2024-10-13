@@ -10,6 +10,7 @@ export class SimpleMiddleware implements NestMiddleware {
       req['user'] = {
         nome: 'Joaquim',
         sobrenome: 'Silva',
+        role: 'user',
       };
     }
     // terminando a cadeia de chamadas

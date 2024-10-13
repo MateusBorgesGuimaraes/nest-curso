@@ -7,30 +7,20 @@ import {
   Patch,
   Post,
   Query,
-  Req,
-  UsePipes,
 } from '@nestjs/common';
 import { RecadosService } from './recados.service';
 import { CreateRecadoDto } from './dto/create-recado.dto';
 import { UpdateRecadoDto } from './dto/update-recado.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { ParseIntIdPipe } from 'src/common/pipes/parse-int-id.pipe';
-import { Request } from 'express';
 
-// DTO - Data Transfer Object (Objeto de Transferência de Dados) -> Serve para transferir dados entre controladores
-// No Nest o DTO é usado também para validação e transformação de dados
-
-// @UseInterceptors(AuthTokenInterceptor)
 @Controller('recados')
-@UsePipes(ParseIntIdPipe)
 export class RecadosController {
   constructor(private readonly recadosService: RecadosService) {}
 
   @Get()
-  async findAll(@Query() paginationDto: PaginationDto, @Req() req: Request) {
-    console.log('RecadosController', req['user']);
-    // return `Retorna todos os recados com limite ${limit} e offset ${offset}`;
+  async findAll(@Query() paginationDto: PaginationDto) {
     const recados = await this.recadosService.findAll(paginationDto);
+
     return recados;
   }
 
