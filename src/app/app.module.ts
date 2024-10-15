@@ -4,21 +4,34 @@ import { AppService } from './app.service';
 import { RecadosModule } from 'src/recados/recados.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PessoasModule } from 'src/pessoas/pessoas.module';
+import { ConfigModule, ConfigType } from '@nestjs/config';
+import globalConfig from 'src/global-config/global.config';
+import { GlobalConfigModule } from 'src/global-config/global-config.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      database: 'postgres',
-      password: 'mateus123',
-      autoLoadEntities: true, // carrega as entidades automaticamente sem precisar especificar
-      synchronize: true, // sincroniza as alterações no bd. Não utilizar em produção
+    ConfigModule.forFeature(globalConfig),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule.forFeature(globalConfig)],
+      inject: [globalConfig.KEY],
+      useFactory: async (
+        globalConfiguration: ConfigType<typeof globalConfig>,
+      ) => {
+        return {
+          type: globalConfiguration.database.type,
+          host: globalConfiguration.database.host,
+          port: globalConfiguration.database.port,
+          username: globalConfiguration.database.username,
+          database: globalConfiguration.database.database,
+          password: globalConfiguration.database.password,
+          autoLoadEntities: globalConfiguration.database.autoLoadEntities,
+          synchronize: globalConfiguration.database.synchronize,
+        };
+      },
     }),
     RecadosModule,
     PessoasModule,
+    GlobalConfigModule,
   ],
   controllers: [AppController],
   providers: [AppService],
