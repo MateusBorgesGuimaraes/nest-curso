@@ -1,32 +1,33 @@
 @baseUrl = http://localhost:3000
+@authToken = {{authenticate.response.body.accessToken}}
 
 # RECADOS
 ### Exibe todos os recados
-GET {{baseUrl}}/recados/?limit=2&offset=4
-Authorization: Bearer 123456
+GET {{baseUrl}}/recados/?limit=10&offset=1
 ### Exibe apenas um recado
-GET {{baseUrl}}/recados/30/
+GET {{baseUrl}}/recados/40/
 ### Cria um recado
 POST {{baseUrl}}/recados/
+Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "texto": "Sol para Mateus fdgss",
-  "deId": 6,
-  "paraId": 2
+  "texto": "Amora para Raven",
+  "paraId": 18
 }
 
 ### Atualiza um recado pelo id
-PATCH  {{baseUrl}}/recados/30/
+PATCH  {{baseUrl}}/recados/40/
+Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "texto": "Sol para Mateus atualizadosss",
   "lido": true
 }
 
 ### Apaga um recado com id 2
-DELETE  {{baseUrl}}/recados/30/
+DELETE  {{baseUrl}}/recados/40/
+Authorization: Bearer {{authToken}}
 
 
 ###################
@@ -35,30 +36,33 @@ DELETE  {{baseUrl}}/recados/30/
 # PESSOAS
 ### Exibe todas as pessoas
 GET {{baseUrl}}/pessoas/
+Authorization: Bearer {{authToken}}
 # ?limit=10&offset=10
 ### Exibe apenas uma pessoa
 GET {{baseUrl}}/pessoas/6/
+Authorization: Bearer {{authToken}}
 ### Cria uma pessoa
 POST {{baseUrl}}/pessoas/
 Content-Type: application/json
 
 {
-  "nome": "Kaio",
+  "nome": "Raven",
   "password": "123456",
-  "email": "kaio@gmail.com"
+  "email": "raven@gmail.com"
 }
 
 ### Atualiza uma pessoa pelo id
-PATCH  {{baseUrl}}/pessoas/15/
+PATCH  {{baseUrl}}/pessoas/18/
+Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "nome": "Neymar2",
-  "password": "aaaaaa"
+  "nome": "KaioAutoAtt"
 }
 
 ### Apaga uma pessoa com id 9
-DELETE  {{baseUrl}}/pessoas/14/
+DELETE  {{baseUrl}}/pessoas/18/
+Authorization: Bearer {{authToken}}
 
 
 ###################
@@ -66,10 +70,11 @@ DELETE  {{baseUrl}}/pessoas/14/
 
 # AUTH
 ### Loga o usuario
+# @name authenticate
 POST  {{baseUrl}}/auth/
 Content-Type: application/json
 
 {
-  "email": "kaio@gmail.com",
+  "email": "amora@gmail.com",
   "password": "123456"
 }
