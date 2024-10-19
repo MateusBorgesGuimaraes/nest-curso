@@ -6,19 +6,19 @@
 ### Exibe todos os recados
 GET {{baseUrl}}/recados/?limit=10&offset=1
 ### Exibe apenas um recado
-GET {{baseUrl}}/recados/40/
+GET {{baseUrl}}/recados/39/
 ### Cria um recado
 POST {{baseUrl}}/recados/
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "texto": "Amora para Raven",
+  "texto": "gfdgdfgdg",
   "paraId": 18
 }
 
 ### Atualiza um recado pelo id
-PATCH  {{baseUrl}}/recados/40/
+PATCH  {{baseUrl}}/recados/43/
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
@@ -27,7 +27,7 @@ Content-Type: application/json
 }
 
 ### Apaga um recado com id 2
-DELETE  {{baseUrl}}/recados/40/
+DELETE  {{baseUrl}}/recados/43/
 Authorization: Bearer {{authToken}}
 
 
@@ -47,9 +47,9 @@ POST {{baseUrl}}/pessoas/
 Content-Type: application/json
 
 {
-  "nome": "Raven",
+  "nome": "Star",
   "password": "123456",
-  "email": "raven@gmail.com"
+  "email": "star@gmail.com"
 }
 
 ### Atualiza uma pessoa pelo id
@@ -76,7 +76,7 @@ POST  {{baseUrl}}/auth/
 Content-Type: application/json
 
 {
-  "email": "amora@gmail.com",
+  "email": "flora@gmail.com",
   "password": "123456"
 }
 

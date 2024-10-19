@@ -17,6 +17,7 @@ import { AuthTokenGuard } from 'src/auth/guards/auth-token.guard';
 import { TokenPayloadParam } from 'src/auth/params/token-payload.param';
 import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 
+@UseGuards()
 @Controller('recados')
 export class RecadosController {
   constructor(private readonly recadosService: RecadosService) {}
