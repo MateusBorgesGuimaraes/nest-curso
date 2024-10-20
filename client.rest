@@ -88,3 +88,19 @@ Content-Type: application/json
 {
   "refreshToken": "{{refreshToken}}"
 }
+
+###################
+
+
+# Upload
+### Foto da pessoas
+POST  {{baseUrl}}/pessoas/upload-picture
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=----BoundaryDelimitadorHttp
+
+------BoundaryDelimitadorHttp
+Content-Disposition: form-data; name="file"; filename="mont.jpg"
+Content-Type: image/jpeg
+
+< C:\Users\mateu\OneDrive\Área de Trabalho\conceitos_nestjs\dev\images\mont.jpg
+------BoundaryDelimitadorHttp--
