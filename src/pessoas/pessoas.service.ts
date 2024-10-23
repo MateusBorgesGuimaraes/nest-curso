@@ -4,6 +4,7 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  Scope,
 } from '@nestjs/common';
 import { CreatePessoaDto } from './dto/create-pessoa.dto';
 import { UpdatePessoaDto } from './dto/update-pessoa.dto';
@@ -15,11 +16,11 @@ import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 import * as path from 'path';
 import * as fs from 'fs/promises';
 
-@Injectable()
+@Injectable({ scope: Scope.DEFAULT })
 export class PessoasService {
   constructor(
     @InjectRepository(Pessoa)
-    private readonly pessoasRepository: Repository<Pessoa>,
+    private readonly pessoaRepository: Repository<Pessoa>,
     private readonly hashingService: HashingService,
   ) {}
 
@@ -28,25 +29,28 @@ export class PessoasService {
       const passwordHash = await this.hashingService.hash(
         createPessoaDto.password,
       );
-      const pessoaData = {
+
+      const dadosPessoa = {
         nome: createPessoaDto.nome,
         passwordHash,
         email: createPessoaDto.email,
+        // routePolicies: createPessoaDto.routePolicies,
       };
 
-      const novaPessoa = this.pessoasRepository.create(pessoaData);
-      await this.pessoasRepository.save(novaPessoa);
+      const novaPessoa = this.pessoaRepository.create(dadosPessoa);
+      await this.pessoaRepository.save(novaPessoa);
       return novaPessoa;
     } catch (error) {
       if (error.code === '23505') {
-        throw new ConflictException('Email ja cadastrado');
+        throw new ConflictException('E-mail já está cadastrado.');
       }
+
       throw error;
     }
   }
 
   async findAll() {
-    const pessoas = await this.pessoasRepository.find({
+    const pessoas = await this.pessoaRepository.find({
       order: {
         id: 'desc',
       },
@@ -56,10 +60,12 @@ export class PessoasService {
   }
 
   async findOne(id: number) {
-    const pessoa = await this.pessoasRepository.findOneBy({ id });
+    const pessoa = await this.pessoaRepository.findOneBy({
+      id,
+    });
 
     if (!pessoa) {
-      throw new NotFoundException('Pessoa não encontrada');
+      throw new NotFoundException('Pessoa não encontrada');
     }
 
     return pessoa;
@@ -70,7 +76,7 @@ export class PessoasService {
     updatePessoaDto: UpdatePessoaDto,
     tokenPayload: TokenPayloadDto,
   ) {
-    const pessoaData = {
+    const dadosPessoa = {
       nome: updatePessoaDto?.nome,
     };
 
@@ -79,37 +85,33 @@ export class PessoasService {
         updatePessoaDto.password,
       );
 
-      pessoaData['passwordHash'] = passwordHash;
+      dadosPessoa['passwordHash'] = passwordHash;
     }
 
-    const pessoa = await this.pessoasRepository.preload({ id, ...pessoaData });
+    const pessoa = await this.pessoaRepository.preload({
+      id,
+      ...dadosPessoa,
+    });
 
     if (!pessoa) {
-      throw new NotFoundException('Pessoa não encontrada');
+      throw new NotFoundException('Pessoa não encontrada');
     }
 
     if (pessoa.id !== tokenPayload.sub) {
-      throw new ForbiddenException(
-        'Voce não tem permissão para alterar esta pessoa',
-      );
+      throw new ForbiddenException('Você não é essa pessoa.');
     }
-    return this.pessoasRepository.save(pessoa);
+
+    return this.pessoaRepository.save(pessoa);
   }
 
   async remove(id: number, tokenPayload: TokenPayloadDto) {
-    const pessoa = await this.pessoasRepository.findOneBy({ id });
-
-    if (!pessoa) {
-      throw new NotFoundException('Pessoa não encontrada');
-    }
+    const pessoa = await this.findOne(id);
 
     if (pessoa.id !== tokenPayload.sub) {
-      throw new ForbiddenException(
-        'Voce não tem permissão para alterar esta pessoa',
-      );
+      throw new ForbiddenException('Você não é essa pessoa.');
     }
 
-    return this.pessoasRepository.remove(pessoa);
+    return this.pessoaRepository.remove(pessoa);
   }
 
   async uploadPicture(
@@ -124,19 +126,16 @@ export class PessoasService {
 
     const fileExtension = path
       .extname(file.originalname)
-      .toLocaleLowerCase()
+      .toLowerCase()
       .substring(1);
-
     const fileName = `${tokenPayload.sub}.${fileExtension}`;
     const fileFullPath = path.resolve(process.cwd(), 'pictures', fileName);
-
-    // file-type image-type sharp -> bibilioteca para trabalhar com imagem, elas leem o formato da imagem e o converte para o formato desejado
 
     await fs.writeFile(fileFullPath, file.buffer);
 
     pessoa.picture = fileName;
-    await this.pessoasRepository.save(pessoa);
+    await this.pessoaRepository.save(pessoa);
 
-    return { pessoa };
+    return pessoa;
   }
 }
